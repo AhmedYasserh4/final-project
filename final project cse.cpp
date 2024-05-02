@@ -3,17 +3,16 @@
 #include <string>
 
 using namespace std;
-// structure to represent a contact
+
 struct Contact {
     string name;
     string phoneNumber;
 };
 
-const int MAX_CONTACTS = 100;
+const int MAX_CONTACTS = 50;
 Contact phonebook[MAX_CONTACTS];
 int contactCount = 0;
 
-// function to load contacts from file
 void loadContactsFromFile() {
     ifstream file("contacts.txt");
     if (file.is_open()) {
@@ -24,7 +23,6 @@ void loadContactsFromFile() {
     }
 }
 
-// function to save contacts to file
 void saveContactsToFile() {
     ofstream file("contacts.txt");
     if (file.is_open()) {
@@ -35,7 +33,6 @@ void saveContactsToFile() {
     }
 }
 
-// function to add a contact to the phonebook
 void addContact() {
     string name, phoneNumber;
     cout << "Enter name: ";
@@ -43,7 +40,6 @@ void addContact() {
     cout << "Enter phone number: ";
     cin >> phoneNumber;
 
-// check if phone number contains only digits
     if (phoneNumber.find_first_not_of("0123456789") == string::npos) {
         phonebook[contactCount++] = { name, phoneNumber };
         cout << "Contact added successfully!" << endl;
@@ -53,7 +49,6 @@ void addContact() {
     }
 }
 
-// function to update or add a contact in the phonebook
 void updateContact() {
     string name, phoneNumber;
     cout << "Enter name: ";
@@ -61,12 +56,10 @@ void updateContact() {
     cout << "Enter phone number: ";
     cin >> phoneNumber;
 
-// check if phone number contains only digits
     if (phoneNumber.find_first_not_of("0123456789") == string::npos) {
         bool found = false;
         for (int i = 0; i < contactCount; ++i) {
             if (phonebook[i].name == name) {
-// Update existing contact
                 phonebook[i].phoneNumber = phoneNumber;
                 cout << "Contact updated successfully!" << endl;
                 found = true;
@@ -74,7 +67,6 @@ void updateContact() {
             }
         }
         if (!found) {
-// Add new contact
             phonebook[contactCount++] = { name, phoneNumber };
             cout << "New contact added successfully!" << endl;
         }
@@ -84,7 +76,6 @@ void updateContact() {
     }
 }
 
-// Function to delete a contact from the phonebook
 void deleteContact() {
     string name;
     cout << "Enter name: ";
@@ -93,7 +84,6 @@ void deleteContact() {
     bool found = false;
     for (int i = 0; i < contactCount; ++i) {
         if (phonebook[i].name == name) {
-// Delete contact
             for (int j = i; j < contactCount - 1; ++j) {
                 phonebook[j] = phonebook[j + 1];
             }
@@ -108,7 +98,6 @@ void deleteContact() {
     }
 }
 
-// Function to retrieve a contact from the phonebook
 void retrieveContact() {
     string keyword;
     cout << "Enter name or number: ";
@@ -127,7 +116,6 @@ void retrieveContact() {
     }
 }
 
-// Function to show all contacts in the phonebook
 void showAllContacts() {
     if (contactCount == 0) {
         cout << "Phonebook is empty" << endl;
