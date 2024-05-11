@@ -33,52 +33,47 @@ void saveContactsToFile() {
     }
 }
 
+bool isPhoneNumber(string str) {
+    for (char c : str) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void addContact() {
     string name, phoneNumber;
-    cout << "Enter name: ";
-    cin >> name;
-    cout << "Enter phone number: ";
-    cin >> phoneNumber;
-
-    if (phoneNumber.find_first_not_of("0123456789") == string::npos) {
-        phonebook[contactCount++] = { name, phoneNumber };
-        cout << "Contact added successfully!" << endl;
-    }
-    else {
+    cin >> name >> phoneNumber;
+    if (!isPhoneNumber(phoneNumber)) {
         cout << "Wrong Input" << endl;
+        return;
     }
+    phonebook[contactCount++] = { name, phoneNumber };
 }
 
 void updateContact() {
     string name, phoneNumber;
-    cout << "Enter name: ";
-    cin >> name;
-    cout << "Enter phone number: ";
-    cin >> phoneNumber;
-
-    if (phoneNumber.find_first_not_of("0123456789") == string::npos) {
-        bool found = false;
-        for (int i = 0; i < contactCount; ++i) {
-            if (phonebook[i].name == name) {
-                phonebook[i].phoneNumber = phoneNumber;
-                cout << "Contact updated successfully!" << endl;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            phonebook[contactCount++] = { name, phoneNumber };
-            cout << "New contact added successfully!" << endl;
+    cin >> name >> phoneNumber;
+    if (!isPhoneNumber(phoneNumber)) {
+        cout << "Wrong Input" << endl;
+        return;
+    }
+    bool found = false;
+    for (int i = 0; i < contactCount; ++i) {
+        if (phonebook[i].name == name) {
+            phonebook[i].phoneNumber = phoneNumber;
+            found = true;
+            break;
         }
     }
-    else {
-        cout << "Wrong Input" << endl;
+    if (!found) {
+        phonebook[contactCount++] = { name, phoneNumber };
     }
 }
 
 void deleteContact() {
     string name;
-    cout << "Enter name: ";
     cin >> name;
 
     bool found = false;
@@ -88,7 +83,6 @@ void deleteContact() {
                 phonebook[j] = phonebook[j + 1];
             }
             --contactCount;
-            cout << "Contact deleted successfully!" << endl;
             found = true;
             break;
         }
@@ -100,13 +94,13 @@ void deleteContact() {
 
 void retrieveContact() {
     string keyword;
-    cout << "Enter name or number: ";
     cin >> keyword;
 
     bool found = false;
     for (int i = 0; i < contactCount; ++i) {
         if (phonebook[i].name == keyword || phonebook[i].phoneNumber == keyword) {
-            cout << "Name: " << phonebook[i].name << ", Phone Number: " << phonebook[i].phoneNumber << endl;
+            cout << phonebook[i].name << " " << phonebook[i].phoneNumber << endl;
+
             found = true;
             break;
         }
@@ -121,9 +115,8 @@ void showAllContacts() {
         cout << "Phonebook is empty" << endl;
     }
     else {
-        cout << "All Contacts:" << endl;
         for (int i = 0; i < contactCount; ++i) {
-            cout << "Name: " << phonebook[i].name << ", Phone Number: " << phonebook[i].phoneNumber << endl;
+            cout << phonebook[i].name << " " << phonebook[i].phoneNumber << endl;
         }
     }
 }
@@ -131,42 +124,35 @@ void showAllContacts() {
 int main() {
     loadContactsFromFile();
 
-    while (true) {
-        cout << "\nPhone Book Menu:" << endl;
-        cout << "1. Add Contact" << endl;
-        cout << "2. Update Contact" << endl;
-        cout << "3. Delete Contact" << endl;
-        cout << "4. Retrieve Contact" << endl;
-        cout << "5. Show All Data" << endl;
-        cout << "6. Exit" << endl;
-        cout << "Enter your choice: ";
-
-        int choice;
+    while (true)
+    {
+        cout << "choose the operation (add||update||retrieve||delete||show||exit): ";
+        string choice;
         cin >> choice;
-
-        switch (choice) {
-        case 1:
+        if (choice == "ADD" || choice == "add")
             addContact();
-            break;
-        case 2:
+        else if (choice == "UPDATE" || choice == "update")
             updateContact();
-            break;
-        case 3:
-            deleteContact();
-            break;
-        case 4:
+        else if (choice == "RETRIEVE" || choice == "retrieve")
             retrieveContact();
-            break;
-        case 5:
+        else if (choice == "DELETE" || choice == "delete")
+            deleteContact();
+        else if (choice == "SHOW" || choice == "show")
+        {
             showAllContacts();
-            break;
-        case 6:
             saveContactsToFile();
-            cout << "Exiting..." << endl;
             return 0;
-        default:
-            cout << "Invalid choice. Please try again." << endl;
         }
+        else if (choice == "EXIT" || choice == "exit")
+        {
+            saveContactsToFile();
+            return 0;
+        }
+        else
+            cout << "Invalid choice. Please try again." << endl;
+    }
+    return 0;
+}
     }
 
     return 0;
